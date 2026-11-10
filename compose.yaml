@@ -1,0 +1,47 @@
+name: pantry-demo
+
+services:
+  pantry:
+    build: .
+    restart: unless-stopped
+    environment:
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      OPENAI_MODEL: ${OPENAI_MODEL:-gpt-4.1-mini}
+      OFF_USER_AGENT: ${OFF_USER_AGENT:-HouseholdPantry/0.1 (local household app)}
+    volumes:
+      - pantry_data:/data
+    ports:
+      - "127.0.0.1:${HTTP_PORT:-18088}:8080"
+  off-index:
+    profiles: [catalog]
+    build: .
+    restart: unless-stopped
+    command: ["python", "-m", "scripts.import_openfoodfacts"]
+    healthcheck:
+      disable: true
+    environment:
+      OFF_DB: /data/openfoodfacts.sqlite
+      OFF_CSV_URL: ${OFF_CSV_URL:-https://static.openfoodfacts.org/data/en.openfoodfacts.org.products.csv.gz}
+      OFF_INDEX_INTERVAL_HOURS: ${OFF_INDEX_INTERVAL_HOURS:-720}
+      OFF_USER_AGENT: ${OFF_USER_AGENT:-HouseholdPantry/0.1 (local household app)}
+    volumes:
+      - pantry_data:/data
+  https:
+    profiles: [https]
+    image: caddy:2.10.2-alpine
+    restart: unless-stopped
+    environment:
+      PANTRY_HOST: ${PANTRY_HOST:-localhost}
+    ports:
+      - "${LAN_IP:-127.0.0.1}:${HTTPS_PORT:-18443}:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      pantry:
+        condition: service_healthy
+volumes:
+  pantry_data:
+  caddy_data:
+  caddy_config:

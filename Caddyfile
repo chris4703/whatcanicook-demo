@@ -1,0 +1,12 @@
+{
+    default_sni {$PANTRY_HOST}
+}
+
+https://{$PANTRY_HOST} {
+    tls internal
+    reverse_proxy pantry:8080 {
+        transport http {
+            response_header_timeout 300s
+        }
+    }
+}

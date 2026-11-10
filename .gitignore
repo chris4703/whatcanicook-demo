@@ -1,0 +1,27 @@
+.env
+.env.*
+!.env.example
+data/
+__pycache__/
+*.pyc
+.DS_Store
+backups/
+certs/
+
+# Private runtime state and exports
+*.db
+*.sqlite
+*.sqlite3
+*.sqlite-wal
+*.sqlite-shm
+*.log
+*.pem
+*.key
+*.crt
+*.mobileconfig
+*.p12
+*.pfx
+secrets/
+credentials/
+exports/
+logs/

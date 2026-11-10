@@ -1,0 +1,90 @@
+.swipe-row {
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid var(--line);
+}
+
+.swipe-row .item-row {
+  position: relative;
+  z-index: 1;
+  border-bottom: 0;
+  background: var(--paper);
+  transition: transform 180ms ease;
+}
+
+.swipe-row.open .swipe-content {
+  transform: translateX(-86px);
+}
+
+.swipe-delete {
+  position: absolute;
+  z-index: 0;
+  inset: 0 0 0 auto;
+  width: 86px;
+  height: 100%;
+  border-radius: 0;
+  background: #a4412a;
+  color: white;
+}
+
+.danger {
+  background: #a4412a;
+  color: white;
+}
+
+#scan-confirmation {
+  position: fixed;
+  z-index: 100;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  pointer-events: none;
+  color: white;
+  background: rgba(41, 77, 60, .94);
+  text-align: center;
+}
+
+#scan-confirmation.show {
+  animation: scan-confirmation 850ms ease both;
+}
+
+#scan-confirmation div,
+#scan-confirmation span,
+#scan-confirmation small {
+  display: block;
+}
+
+#scan-confirmation strong {
+  display: grid;
+  place-items: center;
+  width: 128px;
+  height: 128px;
+  margin: 0 auto 22px;
+  border: 7px solid white;
+  border-radius: 50%;
+  font-size: 78px;
+  line-height: 1;
+}
+
+#scan-confirmation span {
+  font: 700 clamp(48px, 16vw, 92px)/1 -apple-system, BlinkMacSystemFont, sans-serif;
+  letter-spacing: .04em;
+}
+
+#scan-confirmation small {
+  margin-top: 18px;
+  font-size: clamp(17px, 5vw, 28px);
+  font-weight: 750;
+  letter-spacing: .12em;
+}
+
+@keyframes scan-confirmation {
+  0% { opacity: 0; transform: scale(.92); }
+  12%, 72% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1.04); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #scan-confirmation.show { animation: scan-confirmation 850ms linear both; }
+}
